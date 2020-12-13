@@ -8,10 +8,24 @@
 </head>
 <body>
     <h1 style="text-align:center">Weather Dashboard</h1>
-    <h2>Search for a U.S. city</h2>
-    Search term: <input type="text" id="searchTerm" value="Salt Lake City" />
-    <button onclick="myFunction()">Search!</button>
-    <div id="response-container"></div>
+    <div class = "main-content" id = "main-content">
+        <div class = "search-container" id = "search-container">
+            <h2>Search for a U.S. city</h2>
+            <!-- Search term:  -->
+            <input type="text" id="searchTerm" value="Salt Lake City" />
+            <button onclick="myFunction()">Search!</button>
+            <div class = "search-history" id = "search-history"></div>
+        </div>
+        <div class="response-container" id="response-container">
+            <div class = "current-section">
+                <div class = "current-city" id = "current-city"></div>
+                <div class = "current-weather" id = "current-weather"></div>
+            </div>
+            <div class = "forecast-section" id = "forecast-section"></div>
+                <div class = "forecast" id = "forecast"></div>
+            
+        </div>
+    </div>
     <script src="assets/js/script.js"></script>    
 </body>
 </html>
