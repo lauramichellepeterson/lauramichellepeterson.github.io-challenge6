@@ -2,6 +2,16 @@
     box-sizing: border-box;
 }
 
+.page-title {
+    width: 100 vw;
+    height: 60px;
+    line-height: 60px;
+    justify-content: space-around;
+    background-color: #022936;
+    color: white;
+    text-align: center;
+}
+
 .main-content {
     display: flex;
     flex-direction: row;

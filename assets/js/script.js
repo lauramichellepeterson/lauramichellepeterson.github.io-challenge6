@@ -21,15 +21,16 @@ var forecastDate = function(i) {
 
 var createWeatherEl = function(iconData) {
     //Weather Icon
-    var iconEl = document.createElement('p');
-    iconEl.textContent = "Weather Icon: " + iconData;
+    var iconEl = document.createElement('img');
+    iconEl.setAttribute("src","http://openweathermap.org/img/w/" + iconData + ".png");
     return iconEl;
 };
 
 var createTempEl = function(tempData) {
     // Temperature
     var tempEl = document.createElement('p');
-    tempEl.textContent = "Temperature: " + tempData;
+    var tempString = (`Temperature: ${tempData} °F`);
+    tempEl.textContent = tempString;
     return tempEl;
 };
 
@@ -49,11 +50,6 @@ function createHistoryEl(city,i)  {
     return historyEl;
 };
 
-var historyButtonHandler = function() {
-    // get city from the clicked button and run myFunction
-    console.log("History element clicked")
-};
-
 var setUviColor = function(uviValue) {
     var color = "";
     if (uviValue <=2) {
@@ -66,12 +62,18 @@ var setUviColor = function(uviValue) {
     return color;
 };
 
-function myFunction() {
+function myFunction(historySearch="") {
     var searchTerm = document.querySelector("#searchTerm").value;
+
+    if (historySearch != "") {
+        searchTerm = historySearch;
+    }
 
     if (searchTerm != "" || searchTerm != null) {
         cities.push(searchTerm);
         saveCitySearch(cities);
+
+        loadCitySearch();
 
         fetch(
             'https://api.openweathermap.org/data/2.5/weather?q=' + searchTerm + ',us&appid=2c1512576f41358397a22bf62cab49d6'
@@ -102,16 +104,21 @@ function myFunction() {
                 return response2.json();
             })
             .then(function(response2) {
-                var weatherIconEl = document.createElement('h4');
-                weatherIconEl.textContent = "Weather Icon : " + response2.current.weather[0].icon;
+                //Create element to hold weather icon
+                var weatherIconEl = document.createElement('img');
                 weatherIconEl.setAttribute("class", "current-city-icon");
+                // Get the icon id from the api response
+                var weatherIconID = response2.current.weather[0].icon;
+                // Use the icon id to set the image src value
+                weatherIconEl.setAttribute("src","http://openweathermap.org/img/w/" + weatherIconID + ".png");
+                // Add weather element to DOM
                 currentCityEl.appendChild(weatherIconEl);
 
                 var currentWeatherEl = document.querySelector('#current-weather');
                 currentWeatherEl.innerHTML = '';
 
                 var weatherTempEl = document.createElement('h4');
-                weatherTempEl.textContent = "Temperature: " + response2.current.temp;
+                weatherTempEl.textContent = `Temperature: ${response2.current.temp} °F`;
                 currentWeatherEl.appendChild(weatherTempEl);
 
                 var weatherHumidityEl = document.createElement('h4');
@@ -139,11 +146,6 @@ function myFunction() {
                 uvIndexEl.appendChild(uvIndexValueEl);
                 // Add element to DOM
                 currentWeatherEl.appendChild(uvIndexEl);
-
-                var forecastHeadingEl = document.querySelector('#forecast-section');
-                var forecastHeadingTextEl = document.createElement('h2');
-                forecastHeadingTextEl.textContent = "5 Day Forecast";
-                forecastHeadingEl.appendChild(forecastHeadingTextEl);
 
                 var forecastEl = document.querySelector('#forecast');
                 forecastEl.innerHTML = '';
@@ -194,6 +196,14 @@ function loadCitySearch() {
     }
     
     return citiesStorage
+}
+
+var historyButtonHandler = function(event) {
+    //get text from target element of click event
+    var targetText = event.target.textContent;
+    console.log(targetText);
+
+    myFunction(targetText);
 }
 
 searchHistoryEl.addEventListener("click", historyButtonHandler);
